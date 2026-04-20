@@ -1,184 +1,137 @@
-# shot-template-studio
+# Shot Template Studio
 
-给编导用的**镜头模板库**。不是 JSON，不是流程图，就是带填空的中文。
+> A reusable shot template library for AI video generation.
+> Natural-language templates that work across Kling, Runway, Pika, Sora, and Midjourney Video.
 
----
-
-## 为什么做这个
-
-做 AI 视频的人，最大的问题不是"模型不够强"，而是：
-- 每次写 prompt 都要从头想
-- 看到别人的好镜头，想复用但没办法系统积累
-- 复杂的多角色镜头，写着写着就乱了
-
-这个工具就做一件事：**让好的镜头 prompt 变成可复用的资产**。
+[English](README.en.md) | [中文](README.zh.md) | [日本語](README.ja.md)
 
 ---
 
-## 它是什么
+## What it is
 
-一堆 `.txt` 文件，每个文件是一个**带占位符的中文镜头描述**。
+A skill that turns cinematic shots into reusable, shareable templates.
 
-```
-templates/
-├── 半路截胡.txt        ← 情感反转、意外介入
-├── 雨中告别.txt        ← 离别、克制
-├── 擦肩回眸.txt        ← 命运感、初次相遇
-└── ...
-```
+- **Use template** → fill in reference images → get a production-ready prompt
+- **Extract from video** → AI analyzes footage → generates a reusable template
+- **Save your own** → capture what you wrote → build your personal shot library
+- **Share via marketplace** *(roadmap)* → discover and contribute community templates
 
-每个文件长这样：
-
-```
-【半路截胡】
-
-需要的图：
-- 场景
-- 角色B：远处跑来的人
-- 角色C：从旁边截胡的人
-- 角色D：镜头视角的"我"
+Templates are plain `.txt` files with `{placeholders}`. No JSON. No DSL. No code.
 
 ---
 
-以{场景}为背景。这是{角色D}的第一人称视角。
-{角色B}从画面深处挥着手朝镜头小跑过来，景深聚焦在{角色B}身上。
-{角色D}缓缓抬起左手，掌心朝上。
-这时{角色C}的右手从画面左侧伸出来...
-（省略）
+## Quick Start
 
----
+```bash
+# 1. Install the skill
+cp .claude/commands/shot.md ~/.claude/commands/
 
-适用：情感反转、意外介入、三角关系的戏剧性瞬间
-时长参考：8-12秒
+# 2. Browse templates
+/shot list
+
+# 3. Use a template
+/shot use 半路截胡
+
+# 4. Extract from a video you like
+/shot extract [video_file_or_description]
 ```
 
 ---
 
-## 怎么用
+## Commands
 
-### 正向：挑模板做视频
-
-```
-/shot list            ← 看所有模板
-/shot use 半路截胡    ← 用这个模板
-                       ↓
-                      按提示提供 4 张图
-                       ↓
-                      得到完整 prompt
-                       ↓
-                      粘贴到 Kling/Runway/Pika/即梦...
-```
-
-### 反向：从视频提取模板
-
-```
-/shot extract [视频文件或描述]
-                ↓
-               AI 分析镜头语言
-                ↓
-               拆成"需要几张图 + 镜头描述 + 适用场景"
-                ↓
-               保存为新的 .txt 模板
-```
-
-### 保存自己写的好 prompt
-
-```
-写完一段特别满意的 prompt
-/shot save 我的模板名
-                ↓
-               自动把具体人物换成占位符
-                ↓
-               存进模板库
-```
+| Command | Purpose |
+|---------|---------|
+| `/shot list` | List all available templates |
+| `/shot use <name>` | Compose a prompt from a template + reference images |
+| `/shot extract <source>` | Analyze a video and generate a template |
+| `/shot save <name>` | Save the current prompt as a reusable template |
 
 ---
 
-## 为什么不用 JSON 或 YAML
+## Template Format
 
-因为编导不是工程师。
+Each template is a `.txt` file with natural language and `{placeholders}`:
 
-模板就是一段中文，编导能直接打开记事本改。
-`{角色A}` 比 `${char_a}` 友好一百倍。
-"景深拉近"比 `camera: {dof: shallow}` 自然一百倍。
+```
+【Shot Name】
 
-而且视频模型训练数据本来就是自然语言，你给它 JSON 它也要先翻译成自然语言才能用。**中间那层结构化纯属负担。**
-
----
-
-## 设计原则
-
-| 原则 | 做法 |
-|------|------|
-| 编导友好 | 模板就是 `.txt`，不是 JSON |
-| 自然语言优先 | 输入中文，输出中文 |
-| 双向流动 | 模板 → prompt，视频 → 模板 |
-| 模型无关 | 不绑定 Kling/Runway 等任何平台 |
-| 积累导向 | 每次用过好的都能沉淀为资产 |
+Required images:
+- {scene}: location
+- {character_A}: description
 
 ---
 
-## 命令速查
-
-| 命令 | 用途 |
-|------|------|
-| `/shot list` | 列出所有模板 |
-| `/shot use [模板名]` | 用模板生成 prompt |
-| `/shot extract [视频]` | 从视频提取模板 |
-| `/shot save [模板名]` | 把当前 prompt 存为模板 |
+[Flowing natural-language shot description with {placeholders}
+ referring to the provided reference images]
 
 ---
 
-## 和 [continuous-scene-designer](https://github.com/zuiho-kai/continuous-scene-designer) 的关系
+Applicable: [scenario tags]
+Duration: [X-Y seconds]
+```
 
-两个都在解决"AI 视觉创作的状态积累"问题：
-
-| | continuous-scene-designer | shot-template-studio |
-|---|---|---|
-| 解决什么 | 多轮改**一张图**不漂移 | 多个视频**镜头**可复用 |
-| 状态是什么 | scene_state.json（空间锁定） | 模板 .txt（镜头序列） |
-| 给谁用 | 多 agent 协作改图 | 编导一个人创作 |
-| 共同思想 | **把好东西沉淀成可复用资产** |
-
-一个管**空间一致性**，一个管**镜头语言积累**。
-组合起来就是 AI 视觉创作的两条腿。
+**Design rationale:** Templates are written for directors, not engineers.
+Any text editor can modify them. LLMs consume them directly without parsing overhead.
 
 ---
 
-## 文件结构
+## Repository Structure
 
 ```
 shot-template-studio/
-├── README.md
-├── .claude/
-│   └── commands/
-│       └── shot.md              ← skill 定义
-├── templates/
+├── .claude/commands/shot.md        ← skill definition
+├── templates/                      ← shot templates (.txt)
 │   ├── 半路截胡.txt
 │   ├── 雨中告别.txt
-│   ├── 擦肩回眸.txt
-│   └── ...（你自己加的）
-└── example/
-    └── 从视频提取模板的示例.md
+│   └── 擦肩回眸.txt
+├── example/
+│   └── video-to-template.md        ← extraction workflow example
+└── README.{en,zh,ja}.md            ← translated documentation
 ```
 
 ---
 
-## 从这里开始
+## Roadmap
 
-1. clone 这个仓库
-2. 把 `.claude/commands/shot.md` 复制到你的 `~/.claude/commands/`
-3. 运行 `/shot list` 看看有什么模板
-4. 运行 `/shot use 半路截胡` 试一下
+**v0.1** (current)
+- [x] Core skill: list / use / extract / save
+- [x] Starter template collection (3 shots)
+- [x] Multilingual documentation
+
+**v0.2** — Template Marketplace
+- [ ] Central registry of community templates
+- [ ] `/shot install <template>` — fetch from marketplace
+- [ ] `/shot publish` — submit your template for review
+- [ ] Rating, categorization, search
+- [ ] Curated collections (romance / action / documentary / etc.)
+
+**v0.3** — Advanced Features
+- [ ] Template chaining for long-form video
+- [ ] Style transfer between templates
+- [ ] Integration with `continuous-scene-designer` for scene-locked shot sequences
+
+---
+
+## Related Projects
+
+- **[continuous-scene-designer](https://github.com/zuiho-kai/continuous-scene-designer)** — Scene consistency protocol for multi-agent image editing. Complementary use case: locks spatial consistency across rounds.
+
+| | continuous-scene-designer | shot-template-studio |
+|---|---|---|
+| Problem | Multi-round image edit drift | Shot prompt reusability |
+| State | JSON (spatial constraints) | Natural-language templates |
+| Audience | Multi-agent frameworks | Individual directors / creators |
+| Format | Structured | Plain text |
+
+Both address the same underlying challenge: **turning transient AI creative work into reusable assets.**
 
 ---
 
 ## License
 
-MIT — 随便用。
+MIT
 
-## 作者
+## Author
 
-Zuiho ([@zuiho-kai](https://github.com/zuiho-kai))
-
-做给不懂编程但想积累镜头语言的编导。
+Built by Zuiho ([@zuiho-kai](https://github.com/zuiho-kai))
