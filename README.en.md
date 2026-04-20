@@ -103,6 +103,31 @@ Analyzes a video file or descriptive text and produces a new template. The AI id
 ### `/shot save <name>`
 Persists a prompt you've written (or refined) as a reusable template. Automatically abstracts character/scene specifics into placeholders.
 
+### `/shot ui`
+Launches the visual web interface. Starts a local server and opens the browser automatically.
+
+---
+
+## Web UI
+
+A visual interface for non-technical users. No code required.
+
+```bash
+python server.py
+# Opens at http://localhost:8090
+```
+
+Features:
+- Browse all templates visually
+- Add new templates (paste `.txt` content or upload file) → writes directly to disk
+- Delete templates (removes the `.txt` file)
+- Export templates (download `.txt` to share with others)
+- AI-assisted generation (copies `/shot extract` command to clipboard)
+- Assign reference image numbers to each placeholder
+- One-click copy prompt for Kling / Runway / Pika
+
+Templates are persisted as `.txt` files in `templates/`. Sharing a template = sending the `.txt` file.
+
 ---
 
 ## Template Design Principles
@@ -130,6 +155,11 @@ Compiled prompts are plain descriptive text, working uniformly across Kling, Run
 ```
 shot-template-studio/
 ├── .claude/commands/shot.md        ← skill definition
+├── server.py                       ← local server (Python, zero dependencies)
+├── web/                            ← visual UI
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 ├── templates/                      ← shot templates (.txt)
 ├── example/                        ← workflow demonstrations
 ├── README.md                       ← language selector

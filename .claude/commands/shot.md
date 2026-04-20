@@ -10,6 +10,7 @@
 | `/shot list` | - | 列出所有可用模板 |
 | `/shot extract [视频]` | 视频 → 模板 | 分析视频，拆解成一个可复用的模板 |
 | `/shot save [模板名]` | - | 把当前对话里的 prompt 保存为新模板 |
+| `/shot ui` | - | 打开可视化界面，在浏览器里选模板、组装 prompt |
 
 ---
 
@@ -146,6 +147,22 @@
    - 模板名叫什么
    - 适用场景描述
 5. 按格式保存到 `templates/{模板名}.txt`
+
+---
+
+## /shot ui
+
+打开可视化界面。启动本地服务并在浏览器中打开。
+
+### 流程
+
+1. 在 shot-template-studio 根目录启动服务：
+   - `python server.py`（后台运行）
+2. 等待服务就绪后打开浏览器：
+   - Windows：`start http://localhost:8090`
+   - macOS：`open http://localhost:8090`
+   - Linux：`xdg-open http://localhost:8090`
+3. 告诉用户："可视化界面已在浏览器中打开。关闭时按 Ctrl+C 停止服务。"
 
 ---
 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shot Template Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Shot Template <span>Studio</span></h1>
+      <p>选一个镜头模板，准备参考图，复制 Prompt 到视频平台</p>
+    </div>
+
+    <!-- Gallery View -->
+    <div class="gallery-view">
+      <div class="gallery" id="gallery"></div>
+    </div>
+
+    <!-- Builder View -->
+    <div class="builder">
+      <button class="back-btn" onclick="goBack()">&larr; back</button>
+      <div class="builder-header">
+        <div class="builder-title"></div>
+        <div class="builder-subtitle"></div>
+      </div>
+
+      <div class="steps">
+        <div class="step done">01 选模板</div>
+        <div class="step">02 准备参考图</div>
+        <div class="step">03 上传到平台</div>
+        <div class="step">04 复制粘贴</div>
+      </div>
+
+      <div class="slots-section">
+        <h3>参考图对照</h3>
+        <div class="slot-grid" id="slotGrid"></div>
+      </div>
+
+      <div class="prompt-section">
+        <h3>生成的 Prompt</h3>
+        <div class="prompt-preview" id="promptPreview"></div>
+        <div class="btn-row">
+          <button class="btn-copy primary" onclick="copyPrompt()">复制 Prompt</button>
+          <button class="btn-copy secondary" onclick="copyGuide()">复制图片指引</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Add Template Modal -->
+  <div class="modal-overlay" id="addModal" onclick="closeAddModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-title">新增模板</div>
+      <div class="modal-desc">粘贴 .txt 内容，或上传模板文件。保存后会写入 templates/ 目录。</div>
+      <div class="modal-upload">
+        <label class="upload-btn">
+          上传 .txt 文件
+          <input type="file" accept=".txt,.md" onchange="handleFileImport(event)">
+        </label>
+      </div>
+      <textarea id="templateInput" placeholder="【模板名】
+
+需要的图：
+- 场景（一张）
+- 角色A：描述（一张）
+
+---
+
+以{场景}为背景。
+{角色A}做了什么……
+
+---
+
+适用：标签
+时长参考：X-Ys"></textarea>
+      <div class="modal-actions">
+        <button class="btn-copy secondary" onclick="closeAddModal()">取消</button>
+        <button class="btn-copy primary" onclick="confirmAdd()">保存到磁盘</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Generate Modal -->
+  <div class="modal-overlay" id="aiModal" onclick="closeAiModal()">
+    <div class="modal modal-sm" onclick="event.stopPropagation()">
+      <div class="modal-title">AI 生成模板</div>
+      <div class="modal-desc">描述你想要的镜头，复制命令到 Claude Code 执行后自动生成模板。</div>
+      <textarea id="aiInput" rows="4" placeholder="例：一个女生在咖啡馆看书，男生推门进来找到她，把花放在桌上"></textarea>
+      <div class="modal-actions">
+        <button class="btn-copy secondary" onclick="closeAiModal()">取消</button>
+        <button class="btn-copy primary" onclick="confirmAiGenerate()">复制命令</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

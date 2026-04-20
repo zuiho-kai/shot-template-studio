@@ -101,6 +101,31 @@ cp shot-template-studio/.claude/commands/shot.md ~/.claude/commands/
 ### `/shot save <名前>`
 対話中に書いた（あるいは練った）プロンプトを再利用可能なテンプレートとして保存。具体的な人物・場面を自動的にプレースホルダーへ抽象化。
 
+### `/shot ui`
+ビジュアル Web インターフェースを起動。ローカルサーバーを立ち上げ、ブラウザを自動で開く。
+
+---
+
+## Web UI
+
+非技術ユーザー向けのビジュアル・インターフェース。コード不要。
+
+```bash
+python server.py
+# http://localhost:8090 で開く
+```
+
+機能：
+- 全テンプレートをビジュアルに閲覧
+- テンプレート新規追加（`.txt` 内容を貼り付け、またはファイルをアップロード）→ ディスクに直接書き込み
+- テンプレート削除（`.txt` ファイルを削除）
+- テンプレート・エクスポート（`.txt` をダウンロードして共有）
+- AI アシスト生成（`/shot extract` コマンドをクリップボードにコピー）
+- 各プレースホルダーに参照画像番号を割り当て
+- ワンクリックでプロンプトをコピー（Kling / Runway / Pika 対応）
+
+テンプレートは `templates/` 内の `.txt` ファイルとして永続化。テンプレートの共有 = `.txt` ファイルを送るだけ。
+
 ---
 
 ## 設計思想
@@ -128,6 +153,11 @@ cp shot-template-studio/.claude/commands/shot.md ~/.claude/commands/
 ```
 shot-template-studio/
 ├── .claude/commands/shot.md        ← skill 定義
+├── server.py                       ← ローカルサーバー（Python、依存なし）
+├── web/                            ← ビジュアル UI
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 ├── templates/                      ← ショット・テンプレート (.txt)
 ├── example/                        ← ワークフロー事例
 ├── README.md                       ← 言語セレクター

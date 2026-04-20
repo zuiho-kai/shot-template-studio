@@ -100,6 +100,31 @@ cp shot-template-studio/.claude/commands/shot.md ~/.claude/commands/
 ### `/shot save <模板名>`
 把当前对话中编写（或优化）过的 prompt 保存为可复用模板。自动把具体人物/场景抽象为占位符。
 
+### `/shot ui`
+启动可视化界面。自动运行本地服务并打开浏览器。
+
+---
+
+## 可视化界面（Web UI）
+
+面向非技术用户的图形界面，无需写代码。
+
+```bash
+python server.py
+# 浏览器打开 http://localhost:8090
+```
+
+功能：
+- 浏览所有模板
+- 新增模板（粘贴 .txt 内容或上传文件）→ 直接写入磁盘
+- 删除模板（删除对应 .txt 文件）
+- 导出模板（下载 .txt 文件，发给别人即可共享）
+- AI 辅助生成（复制 `/shot extract` 命令到剪贴板）
+- 为每个占位符分配参考图编号
+- 一键复制 Prompt，粘贴到 Kling / Runway / Pika
+
+模板以 `.txt` 文件持久化在 `templates/` 目录。分享模板 = 发送 .txt 文件。
+
 ---
 
 ## 模板设计哲学

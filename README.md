@@ -34,6 +34,10 @@ cp .claude/commands/shot.md ~/.claude/commands/
 
 # 4. Extract from a video you like
 /shot extract [video_file_or_description]
+
+# 5. Open the visual UI
+/shot ui
+# Or manually: python server.py → open http://localhost:8090
 ```
 
 ---
@@ -46,6 +50,29 @@ cp .claude/commands/shot.md ~/.claude/commands/
 | `/shot use <name>` | Compose a prompt from a template + reference images |
 | `/shot extract <source>` | Analyze a video and generate a template |
 | `/shot save <name>` | Save the current prompt as a reusable template |
+| `/shot ui` | Launch the visual web interface |
+
+---
+
+## Web UI
+
+A visual interface for non-technical users. No code required.
+
+```bash
+python server.py
+# Opens at http://localhost:8090
+```
+
+Features:
+- Browse all templates visually
+- Add new templates (paste `.txt` content or upload file)
+- Delete templates (removes the `.txt` file from disk)
+- Export templates (download `.txt` to share with others)
+- AI-assisted generation (copies `/shot extract` command for Claude Code)
+- Assign reference images to numbered slots
+- One-click copy prompt for Kling / Runway / Pika
+
+Templates are persisted as `.txt` files in `templates/`. Share a template = send the `.txt` file.
 
 ---
 
@@ -81,6 +108,11 @@ Any text editor can modify them. LLMs consume them directly without parsing over
 ```
 shot-template-studio/
 ├── .claude/commands/shot.md        ← skill definition
+├── server.py                       ← local server (Python, zero dependencies)
+├── web/                            ← visual UI
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 ├── templates/                      ← shot templates (.txt)
 │   ├── 半路截胡.txt
 │   ├── 雨中告别.txt
